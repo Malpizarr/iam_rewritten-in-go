@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="39a39dad-6edf-4d47-85ef-fa4fbcd5ef7a" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go Application" />
+        <option value="GraphQL File" />
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" url="file://$USER_HOME$/sdk/go1.22.0" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/go/pkg/mod/google.golang.org/grpc@v1.59.0/server.go" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2d5cM7s3iuIPB054rYLw8JtY0VN" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultGoTemplateProperty": "Go File",
+    "Go Build.go build AuditService.executor": "Debug",
+    "Go Build.go build TokenValid.executor": "Run",
+    "Go Build.go build UsersService.executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.automatic.dependencies.download": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/Things/IAM (AUTH SERVICE) rewritten in go",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.rainbow.brackets.disable.when"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\AuditService" />
+      <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService" />
+      <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService\proto" />
+      <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\AuditService\proto" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService\proto" />
+      <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService\Controllers" />
+      <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService\graph" />
+      <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService" />
+      <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService\Model" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Go Build.go build UsersService">
+    <configuration name="go build AuditService" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="IAM (AUTH SERVICE) rewritten in go" />
+      <working_directory value="$PROJECT_DIR$/AuditService" />
+      <kind value="PACKAGE" />
+      <package value="AuditService" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/AuditService/main.go" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build TokenValid" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="IAM (AUTH SERVICE) rewritten in go" />
+      <working_directory value="$PROJECT_DIR$/TokenValid" />
+      <kind value="PACKAGE" />
+      <package value="TokenValid" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/TokenValid/main.go" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build UsersService" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="IAM (AUTH SERVICE) rewritten in go" />
+      <working_directory value="$PROJECT_DIR$/UsersService" />
+      <kind value="PACKAGE" />
+      <package value="UsersService" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/UsersService/main.go" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build UsersService" />
+        <item itemvalue="Go Build.go build TokenValid" />
+        <item itemvalue="Go Build.go build AuditService" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-gosdk-266795519c66-911b893a1778-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-233.13135.104" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VgoProject">
+    <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/UsersService/grpcService/grpc.go</url>
+          <line>77</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/UsersService/Service/UserService.go</url>
+          <line>83</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/UsersService/grpcService/grpc.go</url>
+          <line>108</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="GoApplicationRunConfiguration">
+        <watch expression="*(*&quot;gorm.io/gorm.DB&quot;)(0)" />
+      </configuration>
+    </watches-manager>
+  </component>
+</project>

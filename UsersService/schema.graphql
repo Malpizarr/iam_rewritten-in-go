@@ -1,0 +1,34 @@
+type Query {
+    users: [GORMUser]
+    user(id: ID!): GORMUser
+}
+
+type Mutation {
+    createUser(username: String!, email: String!, password: String!): GORMUser
+    updateUser(id: ID!, username: String, email: String, password: String): GORMUser
+    deleteUser(id: ID!): Boolean
+}
+
+type GORMUser {
+    id: ID!
+    username: String!
+    email: String!
+    password: String!
+    totpSecret: String
+    isTwoFaEnabled: Boolean!
+    isEmailVerified: Boolean!
+    roles: [GORMRole]
+    providers: [GORMOAuthProvider]
+}
+
+type GORMRole {
+    id: ID!
+    name: String!
+}
+
+type GORMOAuthProvider {
+    id: ID!
+    providerId: String!
+    providerName: String!
+    user: GORMUser
+}

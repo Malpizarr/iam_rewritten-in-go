@@ -1,0 +1,23 @@
+
+syntax = "proto3";
+
+option go_package = "github.com/malpi/AuditService/audit;audit";
+
+
+package audit;
+
+message AuditEvent {
+  string eventType = 1;
+  string username = 2;
+  string eventDateTime = 3;
+  string details = 4;
+  string ipAddress = 5;
+}
+
+service AuditService {
+  rpc LogEvent (AuditEvent) returns (LogResponse);
+}
+
+message LogResponse {
+  bool success = 1;
+}

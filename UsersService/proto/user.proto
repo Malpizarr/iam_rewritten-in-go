@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+option go_package = "github.com/malpi/UsersService/user;user";
+
+package user;
+
+service UserService {
+  rpc CreateUser (UserRequest) returns (UserResponse);
+  rpc GetUser (UserRequest) returns (UserResponse);
+  rpc VerifyUser (VerifyUserRequest) returns (VerifyUserResponse);
+  rpc Enable2FA (Enable2FARequest) returns (Enable2FAResponse);
+  rpc Verify2FA (Verify2FARequest) returns (Verify2FAResponse);
+  rpc ProcessOAuthUser (ProcessOAuthUserRequest) returns (ProcessOAuthUserResponse);
+}
+
+message UserRequest {
+  UserProto user = 1;
+}
+
+message UserResponse {
+  UserProto user = 1;
+}
+
+message VerifyUserRequest {
+  string id = 1;
+}
+
+message VerifyUserResponse {
+  string message = 1;
+}
+
+message Enable2FARequest {
+  string username = 1;
+}
+
+message Enable2FAResponse {
+  bytes qrCode = 1;
+}
+
+message Verify2FARequest {
+  string username = 1;
+  string verificationCode = 2;
+}
+
+message Verify2FAResponse {
+  bool success = 1;
+}
+
+
+message ProcessOAuthUserRequest {
+  map<string, string> userDetails = 1;
+}
+
+message ProcessOAuthUserResponse {
+  OauthDTO oauthDTO = 1;
+}
+
+message UserProto {
+  string id = 1;
+  string username = 2;
+  string password = 3;
+  string email = 4;
+  string totpSecret = 5;
+  bool isTwoFaEnabled = 6;
+  bool isEmailVerified = 7;
+  repeated Role roles = 8;
+  repeated OAuthProvider providers = 9;
+}
+
+message Role {
+  string id = 1;
+  string name = 2;
+}
+
+message OAuthProvider {
+  string id = 1;
+  string userId = 2;
+  string providerId = 3;
+  string providerUserId = 4;
+}
+
+message OauthDTO {
+  string email = 1;
+  string name = 2;
+  string provider = 3;
+  string sub = 4;
+}

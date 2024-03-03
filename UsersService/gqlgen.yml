@@ -1,0 +1,8 @@
+schema:
+  - "schema.graphql" # Ruta relativa desde el lugar donde se encuentra gqlgen.yml
+exec:
+  filename: "graph/generated.go" # Ruta relativa para el código generado
+  package: graph
+model:
+  filename: "model/models_gen.go" # Cambiado para colocar modelos en el directorio 'model'
+  package: model
