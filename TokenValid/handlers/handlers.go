@@ -42,5 +42,5 @@ func ValidateToken(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"isValid": isValid})
+	c.JSON(http.StatusOK, isValid)
 }

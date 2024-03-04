@@ -21,27 +21,27 @@ func NewTokenValidationService() *TokenValidationService {
 	}
 }
 
-func (s *TokenValidationService) ValidateToken(token string, username string) (bool, error) {
+func (s *TokenValidationService) ValidateToken(token string, username string) bool {
 	requestBody := TokenValidationRequest{
 		Token:    token,
 		Username: username,
 	}
 	jsonRequestBody, err := json.Marshal(requestBody)
 	if err != nil {
-		return false, err
+		return false
 	}
 
 	resp, err := http.Post(s.AuthServiceUrl, "application/json", bytes.NewBuffer(jsonRequestBody))
 	if err != nil {
-		return false, err
+		return false
 	}
 	defer resp.Body.Close()
 
 	var validationResponse bool
 	err = json.NewDecoder(resp.Body).Decode(&validationResponse)
 	if err != nil {
-		return false, err
+		return false
 	}
 
-	return validationResponse, nil
+	return validationResponse
 }

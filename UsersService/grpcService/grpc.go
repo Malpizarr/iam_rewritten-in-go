@@ -5,6 +5,7 @@ import (
 	"UsersService/model"
 	pb "UsersService/proto"
 	"context"
+	"encoding/base32"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"log"
@@ -12,10 +13,11 @@ import (
 
 type UserServiceImpl struct {
 	pb.UnimplementedUserServiceServer
-	userService *Service.UserService
+	userService            *Service.UserService
+	tokenValidationService *Service.TwoFactorAuthenticationService
 }
 
-func NewUserServiceImpl(userService *Service.UserService) *UserServiceImpl {
+func NewUserServiceImpl(userService *Service.UserService, tokenValidationService *Service.TwoFactorAuthenticationService) *UserServiceImpl {
 	return &UserServiceImpl{
 		userService: userService,
 	}
@@ -134,4 +136,71 @@ func (s *UserServiceImpl) ProcessOAuthUser(ctx context.Context, req *pb.ProcessO
 	}
 
 	return response, nil
+}
+
+func (s *UserServiceImpl) Verify2FA(ctx context.Context, req *pb.Verify2FARequest) (*pb.Verify2FAResponse, error) {
+	username := req.GetUsername()
+	verificationCode := req.GetVerificationCode()
+
+	if len(verificationCode) != 6 {
+		return nil, status.Errorf(codes.InvalidArgument, "Verification code must be a 6-digit number")
+	}
+
+	user, err := s.userService.GetUserByUsername(username)
+	if err != nil {
+		return nil, status.Errorf(codes.NotFound, "User not found")
+	}
+
+	_, err = base32.StdEncoding.DecodeString(*user.TotpSecret)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "Invalid secret key")
+	}
+
+	isCodeValid, err := s.tokenValidationService.VerifyCode(verificationCode, *user.TotpSecret)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Failed to verify code: %v", err)
+	}
+
+	if !isCodeValid {
+		return &pb.Verify2FAResponse{
+			Success: false,
+		}, nil
+	}
+
+	return &pb.Verify2FAResponse{
+		Success: true,
+	}, nil
+}
+
+func (s *UserServiceImpl) Enable2FA(ctx context.Context, req *pb.Enable2FARequest) (*pb.Enable2FAResponse, error) {
+	username := req.GetUsername()
+
+	user, err := s.userService.GetUserByUsername(username)
+	if err != nil {
+		return nil, status.Errorf(codes.NotFound, "User not found")
+	}
+
+	if user.IsTwoFaEnabled {
+		return nil, status.Errorf(codes.AlreadyExists, "2FA is already enabled")
+	}
+
+	secretKey := s.tokenValidationService.GenerateSecretKey(user.Email)
+	user.TotpSecret = &secretKey
+	user.IsTwoFaEnabled = true
+
+	otpAuthUrl := s.tokenValidationService.GenerateTotpUrl(secretKey, "IAM", user.Email)
+
+	qrCode, err := s.tokenValidationService.GenerateQrCode(otpAuthUrl)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, err.Error())
+	}
+
+	_, err = s.userService.UpdateUser(user)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, err.Error())
+	}
+
+	return &pb.Enable2FAResponse{
+		QrCode: qrCode,
+	}, nil
 }

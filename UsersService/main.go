@@ -2,6 +2,7 @@ package main
 
 import (
 	"UsersService/Controllers"
+	"UsersService/Middleware"
 	"UsersService/Repositories"
 	"UsersService/Service"
 	"UsersService/graph"
@@ -57,13 +58,15 @@ func main() {
 	roleRepo := &Repositories.GormRoleRepository{DB: db}
 
 	userService := Service.NewUserService(userRepo, roleRepo)
+	twoFA := Service.NewTwoFactorAuthenticationService()
+	jwtService := Service.NewTokenValidationService()
 
 	lis, err := net.Listen("tcp", portgrpc)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	userGrpcService := grpcService.NewUserServiceImpl(userService)
+	userGrpcService := grpcService.NewUserServiceImpl(userService, twoFA)
 	grpcServer := grpc.NewServer()
 
 	pb.RegisterUserServiceServer(grpcServer, userGrpcService)
@@ -75,12 +78,12 @@ func main() {
 	}()
 	log.Println("gRPC server started at port " + portgrpc)
 
-	resolver := Controllers.NewResolver(userService)
+	resolver := Controllers.NewResolver(userService, jwtService)
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
+	http.Handle("/graphql", Middleware.AuthMiddleware(srv))
 
 	log.Printf("Conectarse a http://localhost%s/ para el playground de GraphQL", graphqlPort)
 	if err := http.ListenAndServe(graphqlPort, nil); err != nil {

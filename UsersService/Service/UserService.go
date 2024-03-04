@@ -175,6 +175,14 @@ func (s *UserService) GetUserById(id string) (*model.GORMUser, error) {
 	return user, nil
 }
 
+func (s *UserService) GetUserByUsername(username string) (*model.GORMUser, error) {
+	user, err := s.UserRepo.FindByUsername(username)
+	if err != nil {
+		return nil, fmt.Errorf("user not found")
+	}
+	return user, nil
+}
+
 func (s *UserService) DeleteUser(user *model.GORMUser) error {
 	return s.UserRepo.Delete(user)
 }

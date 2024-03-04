@@ -6,10 +6,12 @@ import (
 	"UsersService/model"
 	"context"
 	"errors"
+	"strings"
 )
 
 type Resolver struct {
-	userService *Service.UserService
+	userService  *Service.UserService
+	TokenService *Service.TokenValidationService
 }
 
 func (r *Resolver) GORMRole() graph.GORMRoleResolver {
@@ -30,8 +32,8 @@ func (r *Resolver) Query() graph.QueryResolver {
 	return &queryResolver{r}
 }
 
-func NewResolver(userService *Service.UserService) *Resolver {
-	return &Resolver{userService: userService}
+func NewResolver(userService *Service.UserService, TokenService *Service.TokenValidationService) *Resolver {
+	return &Resolver{userService: userService, TokenService: TokenService}
 }
 
 type queryResolver struct{ *Resolver }
@@ -52,6 +54,34 @@ func (r *mutationResolver) CreateUser(ctx context.Context, username string, emai
 }
 
 func (r *mutationResolver) UpdateUser(ctx context.Context, id string, username *string, email *string, password *string) (*model.GORMUser, error) {
+
+	authHeader, ok := ctx.Value("Authorization").(string)
+	if !ok || authHeader == "" {
+		return nil, errors.New("unauthorized")
+	}
+
+	if !strings.HasPrefix(authHeader, "Bearer ") {
+		return nil, errors.New("No token provided")
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	if username == nil {
+		return nil, errors.New("username cannot be nil")
+	}
+
+	if r.TokenService == nil {
+		return nil, errors.New("TokenService is not initialized")
+	}
+
+	if !r.TokenService.ValidateToken(token, *username) {
+		return nil, errors.New("unauthorized")
+	}
+
+	if r.userService == nil {
+		return nil, errors.New("userService is not initialized")
+	}
+
 	user, err := r.userService.GetUserById(id)
 	if err != nil {
 		return nil, err
@@ -60,7 +90,6 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, id string, username *
 		return nil, errors.New("user not found")
 	}
 
-	// Actualizar campos si no son nil
 	if username != nil {
 		user.Username = *username
 	}

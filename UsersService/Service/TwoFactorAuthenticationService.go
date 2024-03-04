@@ -1,14 +1,13 @@
 package Service
 
 import (
-	_ "bytes"
-	"crypto/rand"
+	"bytes"
 	"encoding/base32"
-	"image/color"
-	_ "image/png"
+	"fmt"
+	"image/png"
 
 	"github.com/pquerna/otp/totp"
-	qrcode "github.com/skip2/go-qrcode"
+	"github.com/skip2/go-qrcode"
 )
 
 // TwoFactorAuthenticationService representa el servicio para la autenticación de dos factores.
@@ -19,49 +18,62 @@ func NewTwoFactorAuthenticationService() *TwoFactorAuthenticationService {
 	return &TwoFactorAuthenticationService{}
 }
 
-// GenerateSecretKey genera una nueva clave secreta para la autenticación de dos factores.
-func (s *TwoFactorAuthenticationService) GenerateSecretKey() string {
-	randomBytes := make([]byte, 10) // 10 bytes generan una clave de longitud adecuada.
-	_, err := rand.Read(randomBytes)
+func (s *TwoFactorAuthenticationService) GenerateSecretKey(mail string) string {
+
+	secretKey, err := totp.Generate(totp.GenerateOpts{
+		Issuer:      "IAM",
+		AccountName: mail,
+	})
 	if err != nil {
-		// Manejar el error según sea necesario.
+		fmt.Println("Error generating secret key:", err)
 		return ""
 	}
-	return base32.StdEncoding.EncodeToString(randomBytes)
+	return secretKey.Secret()
 }
 
-// VerifyCode verifica el código proporcionado por el usuario contra la clave secreta.
-func (s *TwoFactorAuthenticationService) VerifyCode(userCode string, secretKey string) bool {
-	return totp.Validate(userCode, secretKey)
+// VerifyCode verifica el código TOTP proporcionado por el usuario
+func (s *TwoFactorAuthenticationService) VerifyCode(userCode, secretKey string) (bool, error) {
+	_, err := base32.StdEncoding.DecodeString(secretKey)
+	if err != nil {
+		return false, fmt.Errorf("Invalid secret key: %v", err)
+	}
+
+	return totp.Validate(userCode, secretKey), nil
 }
 
-// GenerateTotpUrl genera el URL TOTP a partir de la clave secreta, el emisor y el nombre de la cuenta.
-func (s *TwoFactorAuthenticationService) GenerateTotpUrl(secretKey string, issuer string, account string) string {
-	opts := totp.GenerateOpts{
+func (s *TwoFactorAuthenticationService) GenerateTotpUrl(secretKey, issuer, accountName string) string {
+	decodedSecret, err := base32.StdEncoding.DecodeString(secretKey)
+	if err != nil {
+		fmt.Println("Error decoding secret key:", err)
+		return ""
+	}
+
+	url, err := totp.Generate(totp.GenerateOpts{
+		Secret:      decodedSecret,
 		Issuer:      issuer,
-		AccountName: account,
-		Secret:      []byte(secretKey),
-	}
-	key, err := totp.Generate(opts)
+		AccountName: accountName,
+	})
 	if err != nil {
+		fmt.Println("Error generating TOTP URL:", err)
 		return ""
 	}
-	return key.URL()
+	return url.String()
 }
 
+// GenerateQrCode genera un código QR a partir de la URL TOTP
 func (s *TwoFactorAuthenticationService) GenerateQrCode(totpUrl string) ([]byte, error) {
+	// Genera un código QR utilizando la URL TOTP
 	qrCode, err := qrcode.New(totpUrl, qrcode.Medium)
 	if err != nil {
 		return nil, err
 	}
 
-	qrCode.ForegroundColor = color.Black
-	qrCode.BackgroundColor = color.White
-
-	pngBytes, err := qrCode.PNG(200)
+	// Codifica el código QR como PNG
+	var pngBytes bytes.Buffer
+	err = png.Encode(&pngBytes, qrCode.Image(256))
 	if err != nil {
 		return nil, err
 	}
 
-	return pngBytes, nil
+	return pngBytes.Bytes(), nil
 }
