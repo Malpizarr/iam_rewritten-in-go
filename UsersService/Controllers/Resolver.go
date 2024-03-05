@@ -38,17 +38,17 @@ func NewResolver(userService *Service.UserService, TokenService *Service.TokenVa
 
 type queryResolver struct{ *Resolver }
 
-func (r *queryResolver) Users(ctx context.Context) ([]*model.GORMUser, error) {
+func (r *queryResolver) Users(context.Context) ([]*model.GORMUser, error) {
 	return r.userService.GetAllUsers()
 }
 
-func (r *queryResolver) User(ctx context.Context, id string) (*model.GORMUser, error) {
+func (r *queryResolver) User(_ context.Context, id string) (*model.GORMUser, error) {
 	return r.userService.GetUserById(id)
 }
 
 type mutationResolver struct{ *Resolver }
 
-func (r *mutationResolver) CreateUser(ctx context.Context, username string, email string, password string) (*model.GORMUser, error) {
+func (r *mutationResolver) CreateUser(context.Context, string, string, string) (*model.GORMUser, error) {
 	//TODO implement me
 	panic("implement me")
 }
@@ -61,7 +61,7 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, id string, username *
 	}
 
 	if !strings.HasPrefix(authHeader, "Bearer ") {
-		return nil, errors.New("No token provided")
+		return nil, errors.New("no token provided")
 	}
 
 	token := strings.TrimPrefix(authHeader, "Bearer ")
@@ -108,7 +108,7 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, id string, username *
 	return updatedUser, nil
 }
 
-func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*bool, error) {
+func (r *mutationResolver) DeleteUser(_ context.Context, id string) (*bool, error) {
 	userToDelete := &model.GORMUser{}
 	userToDelete.ID = id
 	err := r.userService.DeleteUser(userToDelete)

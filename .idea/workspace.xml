@@ -4,19 +4,33 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="39a39dad-6edf-4d47-85ef-fa4fbcd5ef7a" name="Changes" comment=".">
-      <change afterPath="$PROJECT_DIR$/UsersService/Middleware/JWT.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gateway/go.mod" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gateway/main.go" afterDir="false" />
+    <list default="true" id="39a39dad-6edf-4d47-85ef-fa4fbcd5ef7a" name="Changes" comment="Implementacion de 2FA, Creacion, creacion de QR y Validacion">
+      <change afterPath="$PROJECT_DIR$/AuthService/Repository/VerificationTokenRepository.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/Service/CustomOauth2User.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/Service/UserService.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/config/config.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/config/oauthconfig.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/data/EmailInfo.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/data/User.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/data/VerificationRequest.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/data/VerificationToken.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/email/EmailService.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/go.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/grpc/AuditClient.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/grpc/UserClient.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/handlers/OauthHandlers.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/main.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/proto/audit/audit.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/proto/user/user.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AuthService/util/TokenServiceClient.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AuditService/Repository/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/AuditService/Repository/repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TokenValid/handlers/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/TokenValid/handlers/handlers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AuditService/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/AuditService/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AuditService/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/AuditService/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AuditService/grpcService/grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/AuditService/grpcService/grpc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AuditService/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/AuditService/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UsersService/Controllers/Resolver.go" beforeDir="false" afterPath="$PROJECT_DIR$/UsersService/Controllers/Resolver.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UsersService/Service/TokenValidationService.go" beforeDir="false" afterPath="$PROJECT_DIR$/UsersService/Service/TokenValidationService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UsersService/Service/TwoFactorAuthenticationService.go" beforeDir="false" afterPath="$PROJECT_DIR$/UsersService/Service/TwoFactorAuthenticationService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UsersService/Service/UserService.go" beforeDir="false" afterPath="$PROJECT_DIR$/UsersService/Service/UserService.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UsersService/grpcService/grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/UsersService/grpcService/grpc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UsersService/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/UsersService/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +57,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -58,8 +72,9 @@
   "keyToString": {
     "DefaultGoTemplateProperty": "Go File",
     "Go Build.go build AuditService.executor": "Run",
-    "Go Build.go build TokenValid.executor": "Debug",
-    "Go Build.go build UsersService.executor": "Debug",
+    "Go Build.go build AuthService.executor": "Run",
+    "Go Build.go build TokenValid.executor": "Run",
+    "Go Build.go build UsersService.executor": "Run",
     "Go Build.go build gateway.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -71,29 +86,31 @@
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/Things/IAM (AUTH SERVICE) rewritten in go",
+    "last_opened_file_path": "D:/Things/IAM (AUTH SERVICE) rewritten in go/AuthService/proto",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.rainbow.brackets.disable.when"
+    "rearrange.code.on.save": "true",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\AuthService\proto" />
       <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\AuditService" />
       <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService" />
       <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService\proto" />
       <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\AuditService\proto" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\AuthService\proto\audit" />
+      <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\AuthService\proto\user" />
       <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService\proto" />
       <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService\Controllers" />
       <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService\graph" />
-      <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService" />
-      <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService\Model" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build TokenValid">
+  <component name="RunManager" selected="Go Build.go build UsersService">
     <configuration name="go build AuditService" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="IAM (AUTH SERVICE) rewritten in go" />
       <working_directory value="$PROJECT_DIR$/AuditService" />
@@ -101,6 +118,15 @@
       <package value="AuditService" />
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$/AuditService/main.go" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build AuthService" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="IAM (AUTH SERVICE) rewritten in go" />
+      <working_directory value="$PROJECT_DIR$/AuthService" />
+      <kind value="PACKAGE" />
+      <package value="AuthService" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/AuthService/main.go" />
       <method v="2" />
     </configuration>
     <configuration name="go build TokenValid" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
@@ -132,10 +158,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build TokenValid" />
+        <item itemvalue="Go Build.go build AuthService" />
         <item itemvalue="Go Build.go build UsersService" />
-        <item itemvalue="Go Build.go build gateway" />
+        <item itemvalue="Go Build.go build TokenValid" />
         <item itemvalue="Go Build.go build AuditService" />
+        <item itemvalue="Go Build.go build gateway" />
       </list>
     </recent_temporary>
   </component>
@@ -150,9 +177,21 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="." />
-    <option name="LAST_COMMIT_MESSAGE" value="." />
+    <MESSAGE value="Implementacion de 2FA, Creacion, creacion de QR y Validacion" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implementacion de 2FA, Creacion, creacion de QR y Validacion" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
@@ -160,11 +199,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/UsersService/grpcService/grpc.go</url>
-          <line>175</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/TokenValid/util/util.go</url>
           <line>51</line>
@@ -176,20 +210,16 @@
           <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/UsersService/grpcService/grpc.go</url>
-          <line>142</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/gateway/main.go</url>
-          <line>11</line>
-          <option name="timeStamp" value="20" />
+          <url>file://$PROJECT_DIR$/AuthService/grpc/UserClient.go</url>
+          <line>107</line>
+          <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="GoApplicationRunConfiguration">
         <watch expression="*(*&quot;gorm.io/gorm.DB&quot;)(0)" />
+        <watch expression="accessToken" />
       </configuration>
     </watches-manager>
   </component>

@@ -3,7 +3,7 @@ package main
 import (
 	model "AuditService/Model"
 	repository "AuditService/Repository"
-	grpcService "AuditService/grpcService"
+	"AuditService/grpcService"
 	pb "AuditService/proto"
 	"log"
 	"net"

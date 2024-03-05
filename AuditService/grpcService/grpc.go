@@ -21,7 +21,7 @@ type AuditServiceImpl struct {
 	Repo repository.AuditEventRepository
 }
 
-func (s *AuditServiceImpl) LogEvent(ctx context.Context, req *audit.AuditEvent) (*audit.LogResponse, error) {
+func (s *AuditServiceImpl) LogEvent(_ context.Context, req *audit.AuditEvent) (*audit.LogResponse, error) {
 	event := model.AuditEvent{
 		EventType:     req.GetEventType(),
 		Username:      req.GetUsername(),

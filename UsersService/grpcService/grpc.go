@@ -19,7 +19,8 @@ type UserServiceImpl struct {
 
 func NewUserServiceImpl(userService *Service.UserService, tokenValidationService *Service.TwoFactorAuthenticationService) *UserServiceImpl {
 	return &UserServiceImpl{
-		userService: userService,
+		userService:            userService,
+		tokenValidationService: tokenValidationService,
 	}
 }
 

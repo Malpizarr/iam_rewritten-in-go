@@ -12,11 +12,9 @@ import (
 func main() {
 	mux := http.NewServeMux()
 
-	// Configura el proxy para el servicio de autenticación
 	authProxy := newReverseProxy("http://localhost:8080")
 	mux.Handle("/auth/", authProxy)
 
-	// Configura el proxy para el servicio GraphQL
 	graphqlProxy := newReverseProxy("http://localhost:8083")
 	mux.Handle("/graphql", graphqlProxy)
 
@@ -30,12 +28,10 @@ func main() {
 
 	handler := c.Handler(mux)
 
-	// Inicia el servidor
 	log.Println("El servidor se está ejecutando en http://localhost:8085")
 	log.Fatal(http.ListenAndServe(":8085", handler))
 }
 
-// newReverseProxy crea un nuevo proxy inverso para una URL de destino dada.
 func newReverseProxy(target string) *httputil.ReverseProxy {
 	url, _ := url.Parse(target)
 	proxy := httputil.NewSingleHostReverseProxy(url)
