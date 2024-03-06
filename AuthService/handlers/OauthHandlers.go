@@ -27,42 +27,7 @@ func HandleGitHubLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleGitHubCallback(w http.ResponseWriter, r *http.Request) {
-	tokenValid := util.NewTokenServiceClient()
-	code := r.FormValue("code")
-	token, err := cf.OAuth2ConfigGithub.Exchange(context.Background(), code)
-	if err != nil {
-		http.Error(w, "Failed to exchange token: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	userClient, err := grpc.NewUserClient("localhost", 9091)
-	if err != nil {
-		log.Fatalf("Failed to create user client: %v", err)
-	}
-	defer func(userClient *grpc.UserClient) {
-		err := userClient.Close()
-		if err != nil {
-
-		}
-	}(userClient)
-
-	auditClient, err := grpc.NewAuditClient("localhost", 50052)
-	if err != nil {
-		log.Fatalf("Failed to create audit client: %v", err)
-	}
-	defer auditClient.Close()
-
-	service := service.NewCustomOAuth2UserService(cf.OAuth2ConfigGithub, *userClient, *auditClient)
-
-	user, err := service.ProcessUserDetails(token.AccessToken, "github", r.RemoteAddr)
-	if err != nil {
-		log.Fatalf("Error processing user details: %v", err)
-	}
-
-	JWT, _ := tokenValid.GenerateToken(user.Username)
-
-	fmt.Fprintf(w, "Hello, %s!", user.Username+" JWT: "+JWT)
-
+	HandleOAuthCallback(w, r, cf.OAuth2ConfigGithub, "github")
 }
 
 func HandleGoogleLogin(w http.ResponseWriter, r *http.Request) {
@@ -71,9 +36,13 @@ func HandleGoogleLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
+	HandleOAuthCallback(w, r, cf.OAuth2ConfigGoogle, "google")
+}
+
+func HandleOAuthCallback(w http.ResponseWriter, r *http.Request, oauthConfig *oauth2.Config, provider string) {
 	tokenValid := util.NewTokenServiceClient()
 	code := r.FormValue("code")
-	token, err := cf.OAuth2ConfigGoogle.Exchange(context.Background(), code)
+	token, err := oauthConfig.Exchange(context.Background(), code)
 	if err != nil {
 		http.Error(w, "Failed to exchange token: "+err.Error(), http.StatusInternalServerError)
 		return
@@ -96,9 +65,9 @@ func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 	}
 	defer auditClient.Close()
 
-	service := service.NewCustomOAuth2UserService(cf.OAuth2ConfigGoogle, *userClient, *auditClient)
+	service := service.NewCustomOAuth2UserService(oauthConfig, *userClient, *auditClient)
 
-	user, err := service.ProcessUserDetails(token.AccessToken, "google", r.RemoteAddr)
+	user, err := service.ProcessUserDetails(token.AccessToken, provider, r.RemoteAddr)
 	if err != nil {
 		var userErr *util.UserError
 		if errors.As(err, &userErr) && strings.Contains(userErr.Error(), "2FA verification required") {
@@ -109,7 +78,6 @@ func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// Manejo de otros errores
 		log.Fatalf("Error processing user details: %v", err)
 	}
 

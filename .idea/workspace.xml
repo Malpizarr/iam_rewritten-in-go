@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="39a39dad-6edf-4d47-85ef-fa4fbcd5ef7a" name="Changes" comment="Implemented Auth REST Endpoint, and oauth fixed">
-      <change afterPath="$PROJECT_DIR$/AuthService/util/UserError.go" afterDir="false" />
+    <list default="true" id="39a39dad-6edf-4d47-85ef-fa4fbcd5ef7a" name="Changes" comment="JWT and Error handling for 2FA">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AuthService/Middleware/jwtverify.go" beforeDir="false" afterPath="$PROJECT_DIR$/AuthService/Middleware/jwtverify.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AuthService/grpc/UserClient.go" beforeDir="false" afterPath="$PROJECT_DIR$/AuthService/grpc/UserClient.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AuthService/handlers/OauthHandlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/AuthService/handlers/OauthHandlers.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -90,7 +88,7 @@
       <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService\Controllers" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build TokenValid">
+  <component name="RunManager" selected="Go Build.go build AuthService">
     <configuration name="go build AuditService" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="IAM (AUTH SERVICE) rewritten in go" />
       <working_directory value="$PROJECT_DIR$/AuditService" />
@@ -138,10 +136,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Build.go build AuthService" />
         <item itemvalue="Go Build.go build TokenValid" />
         <item itemvalue="Go Build.go build UsersService" />
         <item itemvalue="Go Build.go build gateway" />
-        <item itemvalue="Go Build.go build AuthService" />
         <item itemvalue="Go Build.go build AuditService" />
       </list>
     </recent_temporary>
@@ -173,7 +171,8 @@
     <MESSAGE value="Implementacion de 2FA, Creacion, creacion de QR y Validacion" />
     <MESSAGE value="AuthService implementado, Ouath Implementado y cominucacion entre servicios via GRPC implementado" />
     <MESSAGE value="Implemented Auth REST Endpoint, and oauth fixed" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented Auth REST Endpoint, and oauth fixed" />
+    <MESSAGE value="JWT and Error handling for 2FA" />
+    <option name="LAST_COMMIT_MESSAGE" value="JWT and Error handling for 2FA" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
@@ -202,16 +201,6 @@
           <option name="timeStamp" value="45" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/AuthService/grpc/UserClient.go</url>
-          <line>109</line>
-          <option name="timeStamp" value="51" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/AuthService/handlers/OauthHandlers.go</url>
-          <line>100</line>
-          <option name="timeStamp" value="52" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/AuthService/handlers/AuthHandlers.go</url>
           <line>131</line>
           <option name="timeStamp" value="53" />
@@ -225,6 +214,16 @@
           <url>file://$PROJECT_DIR$/TokenValid/handlers/handlers.go</url>
           <line>28</line>
           <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/AuthService/handlers/OauthHandlers.go</url>
+          <line>42</line>
+          <option name="timeStamp" value="59" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/AuthService/grpc/UserClient.go</url>
+          <line>109</line>
+          <option name="timeStamp" value="61" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
