@@ -43,8 +43,13 @@ func ConvertProtoUserToDomainUser(protoUser *pb.UserProto) (*model.GORMUser, err
 }
 
 func ConvertDomainUserToProtoUser(user *model.GORMUser) *pb.UserProto {
+	if user == nil {
+		return nil
+	}
 	var totpSecret string
-	if user.TotpSecret != nil {
+	if user.TotpSecret == nil {
+		totpSecret = "nil"
+	} else {
 		totpSecret = *user.TotpSecret
 	}
 

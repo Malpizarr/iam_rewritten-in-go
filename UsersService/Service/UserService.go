@@ -190,12 +190,3 @@ func (s *UserService) DeleteUser(user *model.GORMUser) error {
 func (s *UserService) GetAllUsers() ([]*model.GORMUser, error) {
 	return s.UserRepo.FindAll()
 }
-
-func (s *UserService) ConvertToDTO(user *model.GORMUser) *model.OauthDTO {
-	return &model.OauthDTO{
-		Email:    user.Email,
-		Name:     user.Username,
-		Provider: user.OAuthProvider[0].ProviderName,
-		Sub:      user.OAuthProvider[0].ProviderID,
-	}
-}

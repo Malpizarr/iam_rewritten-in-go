@@ -1,11 +1,12 @@
 package handlers
 
 import (
-	service "AuthService/Service"
 	cf "AuthService/config"
 	"AuthService/grpc"
+	service "AuthService/service"
 	"AuthService/util"
 	"context"
+	"encoding/json"
 	"fmt"
 	"golang.org/x/oauth2"
 	"log"
@@ -99,8 +100,35 @@ func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 		log.Fatalf("Error processing user details: %v", err)
 	}
 
-	JWT, _ := tokenValid.GenerateToken(user.Username)
+	jwtJSON, err := tokenValid.GenerateToken(user.Username)
+	if err != nil {
+		http.Error(w, "Failed to generate JWT: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-	fmt.Fprintf(w, "Hello, %s!", user.Username+" JWT: "+JWT)
+	var jwtResponse struct {
+		Token string `json:"token"`
+	}
+	if err := json.Unmarshal([]byte(jwtJSON), &jwtResponse); err != nil {
+		http.Error(w, "Failed to parse JWT: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
 
+	setCookie(w, jwtResponse.Token)
+
+	targetURL := "http://localhost:3000/2FATEST.html"
+	http.Redirect(w, r, targetURL, http.StatusSeeOther)
+}
+
+func setCookie(w http.ResponseWriter, token string) {
+	cookie := &http.Cookie{
+		Name:     "AUTH_TOKEN",
+		Value:    token,
+		Path:     "/",
+		MaxAge:   3600,
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteLaxMode,
+	}
+	http.SetCookie(w, cookie)
 }

@@ -1,6 +1,7 @@
 package grpc
 
 import (
+	user "AuthService/data"
 	user2 "AuthService/proto/user"
 	"context"
 	"fmt"
@@ -26,7 +27,7 @@ func NewUserClient(host string, port int) (*UserClient, error) {
 	return &UserClient{conn: conn, service: service}, nil
 }
 
-func (c *UserClient) CreateUser(username, email, password string) (*user2.UserProto, error) {
+func (c *UserClient) CreateUser(username, email, password string) (*user.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
@@ -41,10 +42,10 @@ func (c *UserClient) CreateUser(username, email, password string) (*user2.UserPr
 		return nil, err
 	}
 
-	return r.User, nil
+	return c.ConvertToDomainUser(r.User), nil
 }
 
-func (c *UserClient) GetUser(username, password string) (*user2.UserProto, error) {
+func (c *UserClient) GetUser(username, password string) (*user.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
@@ -58,7 +59,7 @@ func (c *UserClient) GetUser(username, password string) (*user2.UserProto, error
 		return nil, err
 	}
 
-	return r.User, nil
+	return c.ConvertToDomainUser(r.User), nil
 }
 
 func (c *UserClient) VerifyUser(id string) (string, error) {
@@ -121,6 +122,18 @@ func (c *UserClient) ProcessOAuthUser(ctx context.Context, email, sub, provider,
 		Email:    r.OauthDTO.Email,
 		Username: r.OauthDTO.Name,
 	}, nil
+}
+
+func (c *UserClient) ConvertToDomainUser(user2 *user2.UserProto) *user.User {
+	if user2 == nil {
+		return &user.User{}
+	}
+	return &user.User{
+		ID:       user2.Id,
+		Username: user2.Username,
+		Email:    user2.Email,
+		Password: user2.Password,
+	}
 }
 
 func (c *UserClient) Close() error {

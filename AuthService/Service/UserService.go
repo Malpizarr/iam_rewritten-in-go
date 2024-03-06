@@ -1,11 +1,9 @@
 package service
 
 import (
+	"AuthService/Repository"
 	"AuthService/data"
-	"AuthService/email"
 	"AuthService/grpc"
-	"AuthService/proto/user"
-	"AuthService/repository"
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
@@ -14,13 +12,12 @@ import (
 
 type UserService struct {
 	PasswordEncoder             func(password string) (string, error)
-	EmailService                email.EmailService
-	UserClientService           grpc.UserClient
+	EmailService                EmailService
 	VerificationTokenRepository repository.VerificationTokenRepository
 	UserClient                  grpc.UserClient
 }
 
-func NewUserService(emailService email.EmailService, userClientService grpc.UserClient, verificationTokenRepository repository.VerificationTokenRepository, userClient grpc.UserClient) *UserService {
+func NewUserService(emailService EmailService, verificationTokenRepository repository.VerificationTokenRepository, userClient grpc.UserClient) *UserService {
 	return &UserService{
 		PasswordEncoder: func(password string) (string, error) {
 			hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
@@ -30,13 +27,12 @@ func NewUserService(emailService email.EmailService, userClientService grpc.User
 			return string(hash), nil
 		},
 		EmailService:                emailService,
-		UserClientService:           userClientService,
 		VerificationTokenRepository: verificationTokenRepository,
 		UserClient:                  userClient,
 	}
 }
 
-func (s *UserService) Register(newUser *user.UserProto) (*user.UserProto, error) {
+func (s *UserService) Register(newUser *data.User) (*data.User, error) {
 	user, err := s.UserClient.CreateUser(newUser.Username, newUser.Email, newUser.Password)
 	if err != nil {
 		return nil, err
@@ -45,7 +41,7 @@ func (s *UserService) Register(newUser *user.UserProto) (*user.UserProto, error)
 	token := generateToken()
 	verificationToken := &data.VerificationToken{
 		Token:  token,
-		UserID: user.Id,
+		UserID: user.ID,
 	}
 	err = s.VerificationTokenRepository.Save(verificationToken)
 	if err != nil {
@@ -61,15 +57,22 @@ func (s *UserService) Register(newUser *user.UserProto) (*user.UserProto, error)
 	return user, nil
 }
 
-func (s *UserService) Login(user *user.UserProto) (*user.UserProto, error) {
+func (s *UserService) Login(user data.User) (*data.User, error) {
 	userResponse, err := s.UserClient.GetUser(user.Username, user.Password)
 	if err != nil {
 		return nil, err
 	}
 
+	if userResponse.ID == "" {
+		return nil, errors.New("user not found")
+	}
+
 	err = bcrypt.CompareHashAndPassword([]byte(userResponse.Password), []byte(user.Password))
 	if err != nil {
-		return nil, errors.New("invalid password")
+		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) || err.Error() == "crypto/bcrypt: hashedSecret too short to be a bcrypted password" {
+			return nil, errors.New("invalid password")
+		}
+		return nil, err
 	}
 
 	return userResponse, nil
