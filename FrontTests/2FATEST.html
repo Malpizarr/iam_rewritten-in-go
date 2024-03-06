@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>2FA Test</title>
+</head>
+<body>
+    <h2>Inicio de Sesión</h2>
+    <form id="loginForm">
+        <input type="text" id="loginUsername" placeholder="Nombre de Usuario">
+        <input type="password" id="loginPassword" placeholder="Contraseña">
+        <button type="submit">Iniciar Sesión</button>
+    </form>
+
+    <div id="2faSection" style="display: none;">
+        <h2>Verificación 2FA</h2>
+        <input type="text" id="2faCode" placeholder="Código 2FA">
+        <button onclick="verify2FA()">Verificar Código</button>
+    </div>
+    <button id="githubLogin">Iniciar sesión con GitHub</button>
+    <button id="googleLogin">Iniciar sesión con Google</button>
+    <button onclick="create2fa()">Habilitar 2FA</button>
+    <script>
+        let currentUsername = '';
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            currentUsername = username;
+
+            fetch('http://localhost:8085/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => {
+                if (response.status === 401) {
+                    document.getElementById('2faSection').style.display = 'block';
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data) {
+                    console.log(data);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        function create2fa() {
+            // Crear una instancia de URLSearchParams usando la parte de búsqueda de la URL actual
+            const queryParams = new URLSearchParams(window.location.search);
+
+            // Obtener el valor del parámetro 'username'
+            const username = queryParams.get('username');
+
+            // Asegúrate de que el nombre de usuario exista antes de continuar
+            if (!username) {
+                console.error('Username is missing in the URL query parameters.');
+                return; // Salir de la función si no hay nombre de usuario
+            }
+
+            // Usa el nombre de usuario en la URL del fetch
+            fetch(`http://localhost:8085/auth/${username}/2fa/enable`, { // Asegúrate de usar el nombre de usuario en la URL correctamente
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    } else {
+                        throw new Error('Network response was not ok.');
+                    }
+                })
+                .then(blob => {
+                    const qrUrl = URL.createObjectURL(blob);
+                    const img = document.createElement('img');
+                    img.src = qrUrl;
+                    document.body.appendChild(img);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+
+
+        function verify2FA() {
+            const code = document.getElementById('2faCode').value;
+
+            fetch('http://localhost:8085/auth/verify-2fa', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: currentUsername, verificationCode: code })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                document.getElementById('2faSection').style.display = 'none';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Verificación 2FA fallida');
+            });
+        }
+
+        document.getElementById('githubLogin').addEventListener('click', function() {
+         window.location.href = 'http://localhost:8080/login/github';
+        });
+
+        document.getElementById('googleLogin').addEventListener('click', function() {
+         window.location.href = 'http://localhost:8080/login/google';
+        });
+
+    </script>
+</body>
+</html>
