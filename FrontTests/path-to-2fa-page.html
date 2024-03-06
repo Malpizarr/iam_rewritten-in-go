@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Verificación 2FA</title>
+</head>
+<body>
+    <h1>Verificación de 2 Factores</h1>
+    <p>Ingresa el código de verificación enviado a tu dispositivo.</p>
+
+    <form id="2faForm">
+        <input type="text" id="2faCode" placeholder="Código 2FA" required>
+        <button type="submit">Verificar</button>
+    </form>
+
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        document.getElementById('2faForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const code = document.getElementById('2faCode').value;
+            const username = getQueryParam('username');  // Obtiene el nombre de usuario de los parámetros de la URL
+
+            fetch('http://localhost:8085/auth/verify-2fa', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ verificationCode: code,username: username })
+            })
+            .then(response => {
+                if (response.ok) {
+                    response.json().then(data => {
+                        alert('Verificación 2FA exitosa. '+ JSON.stringify(data));
+                    });
+                } else {
+                   alert('Error:', response.status);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error en la verificación 2FA.');
+            });
+        });
+    </script>
+</body>
+</html>
