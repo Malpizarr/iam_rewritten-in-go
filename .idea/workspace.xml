@@ -4,20 +4,12 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="39a39dad-6edf-4d47-85ef-fa4fbcd5ef7a" name="Changes" comment="AuthService implementado, Ouath Implementado y cominucacion entre servicios via GRPC implementado">
-      <change afterPath="$PROJECT_DIR$/AuthService/Middleware/jwtverify.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AuthService/handlers/AuthHandlers.go" afterDir="false" />
+    <list default="true" id="39a39dad-6edf-4d47-85ef-fa4fbcd5ef7a" name="Changes" comment="Implemented Auth REST Endpoint, and oauth fixed">
+      <change afterPath="$PROJECT_DIR$/AuthService/util/UserError.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AuthService/Service/UserService.go" beforeDir="false" afterPath="$PROJECT_DIR$/AuthService/Service/UserService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AuthService/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/AuthService/config/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AuthService/data/VerificationRequest.go" beforeDir="false" afterPath="$PROJECT_DIR$/AuthService/data/VerificationRequest.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AuthService/email/EmailService.go" beforeDir="false" afterPath="$PROJECT_DIR$/AuthService/Service/EmailService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AuthService/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/AuthService/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AuthService/Middleware/jwtverify.go" beforeDir="false" afterPath="$PROJECT_DIR$/AuthService/Middleware/jwtverify.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AuthService/grpc/UserClient.go" beforeDir="false" afterPath="$PROJECT_DIR$/AuthService/grpc/UserClient.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AuthService/handlers/OauthHandlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/AuthService/handlers/OauthHandlers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AuthService/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/AuthService/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UsersService/Service/UserService.go" beforeDir="false" afterPath="$PROJECT_DIR$/UsersService/Service/UserService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UsersService/grpcService/grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/UsersService/grpcService/grpc.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,33 +47,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
-    &quot;Go Build.go build AuditService.executor&quot;: &quot;Run&quot;,
-    &quot;Go Build.go build AuthService.executor&quot;: &quot;Debug&quot;,
-    &quot;Go Build.go build TokenValid.executor&quot;: &quot;Run&quot;,
-    &quot;Go Build.go build UsersService.executor&quot;: &quot;Run&quot;,
-    &quot;Go Build.go build gateway.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.generated-requests | #1.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.automatic.dependencies.download&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Things/IAM (AUTH SERVICE) rewritten in go/AuthService/proto&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;rearrange.code.on.save&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultGoTemplateProperty": "Go File",
+    "Go Build.go build AuditService.executor": "Run",
+    "Go Build.go build AuthService.executor": "Debug",
+    "Go Build.go build TokenValid.executor": "Debug",
+    "Go Build.go build UsersService.executor": "Run",
+    "Go Build.go build gateway.executor": "Run",
+    "HTTP Request.generated-requests | #1.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.automatic.dependencies.download": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "git-widget-placeholder": "master",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/Things/IAM (AUTH SERVICE) rewritten in go/AuthService/proto",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "rearrange.code.on.save": "true",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\AuthService\proto" />
@@ -98,7 +90,7 @@
       <recent name="D:\Things\IAM (AUTH SERVICE) rewritten in go\UsersService\Controllers" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build gateway">
+  <component name="RunManager" selected="Go Build.go build TokenValid">
     <configuration name="go build AuditService" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="IAM (AUTH SERVICE) rewritten in go" />
       <working_directory value="$PROJECT_DIR$/AuditService" />
@@ -115,6 +107,15 @@
       <package value="AuthService" />
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$/AuthService/main.go" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build TokenValid" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="IAM (AUTH SERVICE) rewritten in go" />
+      <working_directory value="$PROJECT_DIR$/TokenValid" />
+      <kind value="PACKAGE" />
+      <package value="TokenValid" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/TokenValid/main.go" />
       <method v="2" />
     </configuration>
     <configuration name="go build UsersService" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
@@ -135,15 +136,12 @@
       <filePath value="$PROJECT_DIR$/gateway/main.go" />
       <method v="2" />
     </configuration>
-    <configuration name="generated-requests | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" requestIdentifier="#1" runType="Run single request">
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Build.go build TokenValid" />
+        <item itemvalue="Go Build.go build UsersService" />
         <item itemvalue="Go Build.go build gateway" />
         <item itemvalue="Go Build.go build AuthService" />
-        <item itemvalue="HTTP Request.generated-requests | #1" />
-        <item itemvalue="Go Build.go build UsersService" />
         <item itemvalue="Go Build.go build AuditService" />
       </list>
     </recent_temporary>
@@ -174,7 +172,8 @@
     <MESSAGE value="." />
     <MESSAGE value="Implementacion de 2FA, Creacion, creacion de QR y Validacion" />
     <MESSAGE value="AuthService implementado, Ouath Implementado y cominucacion entre servicios via GRPC implementado" />
-    <option name="LAST_COMMIT_MESSAGE" value="AuthService implementado, Ouath Implementado y cominucacion entre servicios via GRPC implementado" />
+    <MESSAGE value="Implemented Auth REST Endpoint, and oauth fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented Auth REST Endpoint, and oauth fixed" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
@@ -198,19 +197,34 @@
           <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/AuthService/handlers/AuthHandlers.go</url>
-          <line>130</line>
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/UsersService/grpcService/grpc.go</url>
           <line>183</line>
           <option name="timeStamp" value="45" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/AuthService/grpc/UserClient.go</url>
+          <line>109</line>
+          <option name="timeStamp" value="51" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/AuthService/handlers/OauthHandlers.go</url>
+          <line>100</line>
+          <option name="timeStamp" value="52" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/AuthService/handlers/AuthHandlers.go</url>
+          <line>131</line>
+          <option name="timeStamp" value="53" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/AuthService/Middleware/jwtverify.go</url>
-          <line>11</line>
-          <option name="timeStamp" value="47" />
+          <line>10</line>
+          <option name="timeStamp" value="54" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/TokenValid/handlers/handlers.go</url>
+          <line>28</line>
+          <option name="timeStamp" value="57" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

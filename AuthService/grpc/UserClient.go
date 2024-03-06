@@ -3,9 +3,11 @@ package grpc
 import (
 	user "AuthService/data"
 	user2 "AuthService/proto/user"
+	"AuthService/util"
 	"context"
 	"fmt"
 	"google.golang.org/grpc/credentials/insecure"
+	"strings"
 	"time"
 
 	"google.golang.org/grpc"
@@ -115,6 +117,9 @@ func (c *UserClient) ProcessOAuthUser(ctx context.Context, email, sub, provider,
 		},
 	})
 	if err != nil {
+		if strings.Contains(err.Error(), "2FA verification required") {
+			return nil, util.NewUserError(name, "2FA verification required")
+		}
 		return nil, err
 	}
 

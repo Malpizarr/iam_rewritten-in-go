@@ -7,10 +7,13 @@ import (
 	"AuthService/util"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"golang.org/x/oauth2"
 	"log"
 	"net/http"
+	"net/url"
+	"strings"
 )
 
 func HandleMain(w http.ResponseWriter, r *http.Request) {
@@ -97,6 +100,16 @@ func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 
 	user, err := service.ProcessUserDetails(token.AccessToken, "google", r.RemoteAddr)
 	if err != nil {
+		var userErr *util.UserError
+		if errors.As(err, &userErr) && strings.Contains(userErr.Error(), "2FA verification required") {
+			encodedUsername := url.QueryEscape(userErr.Username)
+			twoFaPageUrl := "http://localhost:3000/path-to-2fa-page.html?username=" + encodedUsername
+
+			http.Redirect(w, r, twoFaPageUrl, http.StatusSeeOther)
+			return
+		}
+
+		// Manejo de otros errores
 		log.Fatalf("Error processing user details: %v", err)
 	}
 
@@ -116,7 +129,7 @@ func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 
 	setCookie(w, jwtResponse.Token)
 
-	targetURL := "http://localhost:3000/2FATEST.html"
+	targetURL := "http://localhost:3000/2FATEST.html?username=" + user.Username
 	http.Redirect(w, r, targetURL, http.StatusSeeOther)
 }
 
