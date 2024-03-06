@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="39a39dad-6edf-4d47-85ef-fa4fbcd5ef7a" name="Changes" comment="Se desacoplo el codigo de OauthHandlers.go para lograr reutilizar el codigo">
+    <list default="true" id="39a39dad-6edf-4d47-85ef-fa4fbcd5ef7a" name="Changes" comment="Added proto Files">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,7 +59,7 @@
     &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.modules.automatic.dependencies.download&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;NewStuff&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
     &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
@@ -171,7 +172,8 @@
     <MESSAGE value="Implemented Auth REST Endpoint, and oauth fixed" />
     <MESSAGE value="JWT and Error handling for 2FA" />
     <MESSAGE value="Se desacoplo el codigo de OauthHandlers.go para lograr reutilizar el codigo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Se desacoplo el codigo de OauthHandlers.go para lograr reutilizar el codigo" />
+    <MESSAGE value="Added proto Files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added proto Files" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
