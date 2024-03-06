@@ -59,7 +59,7 @@ func HandleOAuthCallback(w http.ResponseWriter, r *http.Request, oauthConfig *oa
 		}
 	}(userClient)
 
-	auditClient, err := grpc.NewAuditClient("localhost", 50052)
+	auditClient, err := grpc.NewAuditClient("localhost", 9090)
 	if err != nil {
 		log.Fatalf("Failed to create audit client: %v", err)
 	}
