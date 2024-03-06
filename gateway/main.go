@@ -18,7 +18,6 @@ func main() {
 	graphqlProxy := newReverseProxy("http://localhost:8083")
 	mux.Handle("/graphql", graphqlProxy)
 
-	// Configura CORS
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://127.0.0.1:3000", "http://localhost:3000", "https://bookfront-r6l1.onrender.com", "https://bookfront-delta.vercel.app"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
