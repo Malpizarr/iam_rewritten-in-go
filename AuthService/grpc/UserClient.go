@@ -30,7 +30,7 @@ func NewUserClient(host string, port int) (*UserClient, error) {
 }
 
 func (c *UserClient) CreateUser(username, email, password string) (*user.User, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second) // Ajusta el tiempo según necesidad
 	defer cancel()
 
 	r, err := c.service.CreateUser(ctx, &user2.UserRequest{
@@ -40,6 +40,7 @@ func (c *UserClient) CreateUser(username, email, password string) (*user.User, e
 			Password: password,
 		},
 	})
+
 	if err != nil {
 		return nil, err
 	}

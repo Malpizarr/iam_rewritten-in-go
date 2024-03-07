@@ -25,32 +25,46 @@ func NewUserService(userRepo Repositories.UserRepository, roleRepo Repositories.
 }
 
 func (s *UserService) CreateUser(newUser *model.GORMUser) (*model.GORMUser, error) {
-	userRole, err := s.RoleRepo.FindByName("ROLE_USER")
+	db := s.UserRepo.GetDB()
+
+	err := db.Transaction(func(tx *gorm.DB) error {
+		userRole, err := s.RoleRepo.FindByName("ROLE_USER")
+		if err != nil {
+			return err
+		}
+
+		newUser.Roles = append(newUser.Roles, *userRole)
+
+		if _, err := s.UserRepo.FindByUsername(newUser.Username); err == nil {
+			return errors.New("username already taken")
+		}
+
+		if _, err := s.UserRepo.FindByEmail(newUser.Email); err == nil {
+			return errors.New("email already taken")
+		}
+
+		matched, _ := regexp.MatchString(`^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$`, newUser.Email)
+		if !matched {
+			return errors.New("invalid email format")
+		}
+
+		newUser.IsTwoFaEnabled = false
+		newUser.IsEmailVerified = false
+		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
+		newUser.Password = string(hashedPassword)
+
+		if err := tx.Save(newUser).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
 	if err != nil {
 		return nil, err
 	}
 
-	newUser.Roles = append(newUser.Roles, *userRole)
-
-	if _, err := s.UserRepo.FindByUsername(newUser.Username); err == nil {
-		return nil, errors.New("username already taken")
-	}
-
-	if _, err := s.UserRepo.FindByEmail(newUser.Email); err == nil {
-		return nil, errors.New("email already taken")
-	}
-
-	matched, _ := regexp.MatchString(`^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$`, newUser.Email)
-	if !matched {
-		return nil, errors.New("invalid email format")
-	}
-
-	newUser.IsTwoFaEnabled = false
-	newUser.IsEmailVerified = false
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
-	newUser.Password = string(hashedPassword)
-
-	return s.UserRepo.Save(newUser)
+	return newUser, nil
 }
 
 func (s *UserService) SetVerified(user *model.GORMUser) error {

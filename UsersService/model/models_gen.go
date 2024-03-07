@@ -9,8 +9,8 @@ type GORMOAuthProvider struct {
 	ID           string    `gorm:"type:varchar(36);primaryKey;" json:"ID"`
 	ProviderID   string    `json:"providerId"`
 	ProviderName string    `json:"providerName"`
-	UserID       string    `gorm:"type:varchar(255);"`
-	User         *GORMUser `json:"user,omitempty" gorm:"foreignKey:UserID;references:ID"`
+	UserID       string    `gorm:"type:varchar(36);null" json:"userID"`
+	User         *GORMUser `gorm:"foreignKey:UserID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 func (GORMOAuthProvider) TableName() string {
@@ -34,8 +34,8 @@ type GORMUser struct {
 	TotpSecret      *string             `json:"totpSecret,omitempty"`
 	IsTwoFaEnabled  bool                `json:"isTwoFaEnabled" gorm:"default:false"`
 	IsEmailVerified bool                `json:"isEmailVerified" gorm:"default:false"`
-	Roles           []GORMRole          `json:"roles,omitempty" gorm:"many2many:user_roles;"`
-	OAuthProvider   []GORMOAuthProvider `json:"providers,omitempty" gorm:"foreignKey:UserID"`
+	Roles           []GORMRole          `gorm:"many2many:user_roles;foreignKey:ID;joinForeignKey:UserID;References:ID;JoinReferences:RoleID"`
+	OAuthProvider   []GORMOAuthProvider `gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 func (GORMUser) TableName() string {
@@ -44,7 +44,7 @@ func (GORMUser) TableName() string {
 
 func (u *GORMUser) BeforeCreate(tx *gorm.DB) (err error) {
 	if u.ID == "" {
-		u.ID = uuid.New().String()
+		u.ID = uuid.NewString()
 	}
 	return
 }
