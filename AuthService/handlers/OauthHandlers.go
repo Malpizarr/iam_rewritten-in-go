@@ -54,6 +54,10 @@ func HandleGoogleCallbackCLI(w http.ResponseWriter, r *http.Request) {
 	OAuthExchange(w, r)
 }
 
+type jwtResponse struct {
+	Token string `json:"token"`
+}
+
 func OAuthExchange(w http.ResponseWriter, r *http.Request) {
 	userClient, err := grpc.NewUserClient("localhost", 9091)
 	auditClient, err := grpc.NewAuditClient("localhost", 9090)
@@ -72,12 +76,13 @@ func OAuthExchange(w http.ResponseWriter, r *http.Request) {
 	user, err := service.ProcessUserDetails(token.AccessToken, "google", r.RemoteAddr)
 
 	jwtToken, err := tokenValid.GenerateToken(user.Username)
+
 	if err != nil {
 		http.Error(w, fmt.Sprintf("No se pudo generar el JWT: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	http.Redirect(w, r, "http://localhost:8081/callback?jwt="+url.QueryEscape(jwtToken), http.StatusFound)
+	http.Redirect(w, r, "http://localhost:8081/callback?jwt="+url.QueryEscape(jwtToken)+"&username="+url.QueryEscape(user.Username), http.StatusFound)
 
 }
 
