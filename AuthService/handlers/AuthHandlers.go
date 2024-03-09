@@ -51,7 +51,7 @@ func (ac *AuthController) Register(w http.ResponseWriter, r *http.Request) {
 	if err := ac.logAuditEvent("REGISTER", user.Username, time.Now().String(), "User registered successfully", ipAddress); err != nil {
 		log.Printf("Error logging audit event for user %s: %v", user.Username, err)
 	}
-	err = json.NewEncoder(w).Encode(user)
+	err = json.NewEncoder(w).Encode(user.Username)
 	if err != nil {
 		return
 	}

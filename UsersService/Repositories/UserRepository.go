@@ -16,6 +16,8 @@ type UserRepository interface {
 	Delete(user *model.GORMUser) error
 
 	FindAll() ([]*model.GORMUser, error)
+
+	GetDB() *gorm.DB
 }
 
 type GormUserRepository struct {
@@ -32,6 +34,10 @@ func (repo *GormUserRepository) FindByID(id string) (*model.GORMUser, error) {
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (repo *GormUserRepository) GetDB() *gorm.DB {
+	return repo.DB
 }
 
 func (repo *GormUserRepository) FindByEmail(email string) (*model.GORMUser, error) {

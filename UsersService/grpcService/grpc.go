@@ -77,9 +77,11 @@ func (s *UserServiceImpl) CreateUser(ctx context.Context, req *pb.UserRequest) (
 		return nil, status.Errorf(codes.Internal, "Error al crear el usuario: %v", err)
 	}
 
-	return &pb.UserResponse{
+	response := &pb.UserResponse{
 		User: ConvertDomainUserToProtoUser(createdUser),
-	}, nil
+	}
+
+	return response, nil
 }
 
 func (s *UserServiceImpl) GetUser(ctx context.Context, req *pb.UserRequest) (*pb.UserResponse, error) {

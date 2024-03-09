@@ -8,6 +8,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"golang.org/x/crypto/bcrypt"
+	"time"
 )
 
 type UserService struct {
@@ -40,8 +41,9 @@ func (s *UserService) Register(newUser *data.User) (*data.User, error) {
 
 	token := generateToken()
 	verificationToken := &data.VerificationToken{
-		Token:  token,
-		UserID: user.ID,
+		Token:      token,
+		ExpiryDate: time.Now().Add(time.Hour * 24),
+		UserID:     user.ID,
 	}
 	err = s.VerificationTokenRepository.Save(verificationToken)
 	if err != nil {

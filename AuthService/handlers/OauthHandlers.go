@@ -10,11 +10,16 @@ import (
 	"errors"
 	"fmt"
 	"golang.org/x/oauth2"
+	_ "golang.org/x/oauth2/google"
 	"log"
 	"net/http"
 	"net/url"
 	"strings"
 )
+
+type OAuthExchangeRequest struct {
+	Code string `json:"code"`
+}
 
 func HandleMain(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `<a href="/login/github">Login with GitHub</a>`)
@@ -33,6 +38,64 @@ func HandleGitHubCallback(w http.ResponseWriter, r *http.Request) {
 func HandleGoogleLogin(w http.ResponseWriter, r *http.Request) {
 	url := cf.OAuth2ConfigGoogle.AuthCodeURL("state", oauth2.AccessTypeOnline)
 	http.Redirect(w, r, url, http.StatusFound)
+}
+
+func HandleGoogleLoginCLI(w http.ResponseWriter, r *http.Request) {
+	state := r.URL.Query().Get("state")
+	codeChallenge := r.URL.Query().Get("code_challenge")
+
+	authURL := fmt.Sprintf("https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=472975436513-qtrfpb07j2ngdbgf79vnufl0mbaegsum.apps.googleusercontent.com&redirect_uri=http://localhost:8080/oauth/exchange&scope=%s&state=%s&code_challenge=%s&code_challenge_method=S256",
+		url.QueryEscape("https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email"), state, codeChallenge)
+
+	http.Redirect(w, r, authURL, http.StatusFound)
+}
+
+func HandleGoogleCallbackCLI(w http.ResponseWriter, r *http.Request) {
+	OAuthExchange(w, r)
+}
+
+type jwtResponse struct {
+	Token string `json:"token"`
+}
+
+func OAuthExchange(w http.ResponseWriter, r *http.Request) {
+	userClient, err := grpc.NewUserClient("localhost", 9091)
+	auditClient, err := grpc.NewAuditClient("localhost", 9090)
+	tokenValid := util.NewTokenServiceClient()
+	code := r.URL.Query().Get("code")
+	codeVerifier := r.URL.Query().Get("code_verifier")
+
+	token, err := exchangeCodeForToken(code, codeVerifier)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("No se pudo intercambiar el código por un token: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	service := service.NewCustomOAuth2UserService(cf.OAuth2ConfigGoogleCLI, *userClient, *auditClient)
+
+	user, err := service.ProcessUserDetails(token.AccessToken, "google", r.RemoteAddr)
+
+	jwtToken, err := tokenValid.GenerateToken(user.Username)
+
+	if err != nil {
+		http.Error(w, fmt.Sprintf("No se pudo generar el JWT: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "http://localhost:8081/callback?jwt="+url.QueryEscape(jwtToken)+"&username="+url.QueryEscape(user.Username), http.StatusFound)
+
+}
+
+func exchangeCodeForToken(code, codeVerifier string) (*oauth2.Token, error) {
+
+	ctx := context.Background()
+
+	token, err := cf.OAuth2ConfigGoogleCLI.Exchange(ctx, code, oauth2.SetAuthURLParam("code_verifier", codeVerifier))
+	if err != nil {
+		return nil, fmt.Errorf("no se pudo intercambiar el código por un token: %w", err)
+	}
+
+	return token, nil
 }
 
 func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
